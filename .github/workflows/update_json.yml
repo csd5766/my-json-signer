@@ -18,9 +18,7 @@ jobs:
 
       - name: Create private key file from secret
         run: |
-          echo "${{ secrets.PRIVATE_KEY_PEM }}" > private_key.pem
-          # 또는 줄바꿈 문제 있을 때는 printf를 사용하세요
-          # printf "%b" "${{ secrets.PRIVATE_KEY_PEM }}" > private_key.pem
+          printf "%b" "${{ secrets.PRIVATE_KEY_PEM }}" > private_key.pem
 
       - name: Install dependencies
         run: pip install cryptography
