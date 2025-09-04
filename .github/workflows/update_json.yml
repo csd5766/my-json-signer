@@ -23,12 +23,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install cryptography
 
-      - name: Run JSON generation script
+            - name: Run JSON generation script
         env:
           PRIVATE_KEY_PEM: ${{ secrets.PRIVATE_KEY_PEM }}
         run: |
           echo "$PRIVATE_KEY_PEM" > private_key.pem
-          python generate_json.py
+          ls -la
+          python ./generate_json.py
 
       - name: Commit and push changes
         run: |
