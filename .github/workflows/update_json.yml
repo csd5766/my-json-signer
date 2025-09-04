@@ -1,0 +1,39 @@
+name: Generate Signed JSON Daily
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 매일 자정 UTC 실행
+  workflow_dispatch:      # 수동 실행 허용
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install cryptography
+
+      - name: Run JSON generation script
+        env:
+          PRIVATE_KEY_PEM: ${{ secrets.PRIVATE_KEY_PEM }}
+        run: |
+          echo "$PRIVATE_KEY_PEM" > private_key.pem
+          python generate_json.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add slots_signed.json
+          git commit -m "Update slots_signed.json [skip ci]" || echo "No changes to commit"
+          git push
