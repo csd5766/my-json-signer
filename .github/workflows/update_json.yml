@@ -23,10 +23,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install cryptography
 
-      - name: Create private_key.pem file
+            - name: Create private_key.pem file
         env:
           PRIVATE_KEY_PEM: ${{ secrets.PRIVATE_KEY_PEM }}
-        run: echo "$PRIVATE_KEY_PEM" > private_key.pem
+        run: |
+          echo "$PRIVATE_KEY_PEM" > my_private_key.pem
+
 
       - name: List current directory files
         run: ls -la
