@@ -32,7 +32,7 @@ jobs:
         run: ls -la
 
       - name: Run JSON generation script
-        run: python ./generate_json.py
+        run: python ./Json_Make.py
 
       - name: Commit and push changes
         run: |
