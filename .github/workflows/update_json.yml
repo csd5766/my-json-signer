@@ -2,8 +2,8 @@ name: Generate Signed JSON Daily
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 매일 자정 UTC 실행
-  workflow_dispatch:      # 수동 실행 허용
+    - cron: '0 0 * * *'  # 매일 자정 UTC에 실행
+  workflow_dispatch:      # 수동 실행 가능
 
 jobs:
   build:
@@ -23,13 +23,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install cryptography
 
-            - name: Run JSON generation script
+      - name: Create private_key.pem file
         env:
           PRIVATE_KEY_PEM: ${{ secrets.PRIVATE_KEY_PEM }}
-        run: |
-          echo "$PRIVATE_KEY_PEM" > private_key.pem
-          ls -la
-          python ./generate_json.py
+        run: echo "$PRIVATE_KEY_PEM" > private_key.pem
+
+      - name: List current directory files
+        run: ls -la
+
+      - name: Run JSON generation script
+        run: python ./generate_json.py
 
       - name: Commit and push changes
         run: |
